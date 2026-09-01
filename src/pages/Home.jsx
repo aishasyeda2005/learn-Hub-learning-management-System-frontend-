@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Check } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import courses from "../data/courses";
 import CourseCard from "../components/CourseCard";
 import FAQAccordion from "../components/FAQAccordion";
@@ -8,7 +8,38 @@ import PromoCarousel from "../components/PromoCarousel";
 
 const categoryPills = ["All", "Web Development", "Design", "Data Science", "Marketing"];
 
-const instructorLogos = ["Ayesha Khan", "Hamza Ali", "Sara Ahmed", "Bilal Raza", "Zainab Malik"];
+const instructors = [
+  {
+    name: "Ayesha Khan",
+    category: "Web Development Instructor",
+    photo: "/instructors/ayesha-khan.jpg",
+    gradient: "from-blue-500 to-cyan-400",
+  },
+  {
+    name: "Hamza Ali",
+    category: "Web Development Instructor",
+    photo: "/instructors/hamza-ali.jpg",
+    gradient: "from-orange-500 to-amber-400",
+  },
+  {
+    name: "Sara Ahmed",
+    category: "Design Instructor",
+    photo: "/instructors/sara-ahmed.jpg",
+    gradient: "from-pink-500 to-fuchsia-400",
+  },
+  {
+    name: "Bilal Raza",
+    category: "Data Science Instructor",
+    photo: "/instructors/bilal-raza.jpg",
+    gradient: "from-emerald-500 to-teal-400",
+  },
+  {
+    name: "Zainab Malik",
+    category: "Marketing Instructor",
+    photo: "/instructors/zainab-malik.jpg",
+    gradient: "from-purple-500 to-violet-400",
+  },
+];
 
 const testimonials = [
   {
@@ -119,22 +150,46 @@ function Home() {
       </section>
 
       {/* Trusted instructors strip */}
-      <section className="max-w-7xl mx-auto px-6 py-10 border-t border-gray-100 dark:border-gray-800">
-        <h3 className="text-center text-gray-600 dark:text-gray-400 text-sm font-medium mb-6">
+      <section className="max-w-7xl mx-auto px-6 py-14 border-t border-gray-100 dark:border-gray-800">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">
           Learn from experienced instructors across every field
-        </h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {instructorLogos.map((name) => (
-            <span
-              key={name}
-              className="px-5 py-2.5 rounded-full border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-200 flex items-center gap-2"
-            >
-              <span className="w-5 h-5 rounded-full bg-[#0056D2] text-white text-[10px] font-bold flex items-center justify-center">
-                {name.charAt(0)}
-              </span>
-              {name}
-            </span>
-          ))}
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+          {instructors.map((inst) => {
+            const theirCourses = courses.filter((c) => c.instructor === inst.name);
+            const avgRating = (
+              theirCourses.reduce((sum, c) => sum + c.rating, 0) / theirCourses.length
+            ).toFixed(1);
+            const totalStudents = theirCourses.reduce((sum, c) => sum + c.students, 0);
+            const totalHours = theirCourses.reduce((sum, c) => sum + parseInt(c.duration), 0);
+
+            return (
+              <div key={inst.name} className="group cursor-pointer">
+                <div
+                  className={`rounded-lg overflow-hidden aspect-[4/5] bg-gradient-to-br ${inst.gradient} relative`}
+                >
+                  <img
+                    src={inst.photo}
+                    alt={inst.name}
+                    className="w-full h-full object-cover mix-blend-luminosity group-hover:scale-105 transition"
+                  />
+                </div>
+                <h3 className="font-bold text-gray-900 dark:text-white mt-3">{inst.name}</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{inst.category}</p>
+                <div className="flex flex-wrap gap-1.5 text-xs">
+                  <span className="flex items-center gap-1 border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5 text-gray-700 dark:text-gray-300">
+                    <Star size={11} className="fill-yellow-400 text-yellow-400" /> {avgRating}
+                  </span>
+                  <span className="border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5 text-gray-700 dark:text-gray-300">
+                    {totalStudents.toLocaleString()} students
+                  </span>
+                  <span className="border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5 text-gray-700 dark:text-gray-300">
+                    {totalHours} hours
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 

@@ -21,6 +21,12 @@ export function AppProvider({ children }) {
     return saved ? JSON.parse(saved) : {};
   });
 
+  // Completed lessons per course: { courseId: [true, false, true, ...] }
+  const [completedLessons, setCompletedLessons] = useState(() => {
+    const saved = localStorage.getItem("completedLessons");
+    return saved ? JSON.parse(saved) : {};
+  });
+
   // Profile info - persisted in localStorage
   const [profile, setProfile] = useState(() => {
     const saved = localStorage.getItem("profile");
@@ -56,6 +62,10 @@ export function AppProvider({ children }) {
   useEffect(() => {
     localStorage.setItem("progress", JSON.stringify(progress));
   }, [progress]);
+
+  useEffect(() => {
+    localStorage.setItem("completedLessons", JSON.stringify(completedLessons));
+  }, [completedLessons]);
 
   useEffect(() => {
     localStorage.setItem("profile", JSON.stringify(profile));
@@ -102,12 +112,33 @@ export function AppProvider({ children }) {
     setProgress((prev) => ({ ...prev, [courseId]: percentage }));
   }
 
+  // Toggle a single lesson's completed state for a course, and
+  // automatically recalculate that course's overall progress %.
+  function toggleLesson(courseId, lessonIndex, totalLessons) {
+    setCompletedLessons((prev) => {
+      const current = prev[courseId] || Array(totalLessons).fill(false);
+      const updated = [...current];
+      updated[lessonIndex] = !updated[lessonIndex];
+
+      const completedCount = updated.filter(Boolean).length;
+      const percentage = Math.round((completedCount / totalLessons) * 100);
+      setProgress((p) => ({ ...p, [courseId]: percentage }));
+
+      if (updated[lessonIndex]) {
+        showToast("Lesson marked as complete");
+      }
+
+      return { ...prev, [courseId]: updated };
+    });
+  }
+
   return (
     <AppContext.Provider
       value={{
         enrolledCourses,
         wishlist,
         progress,
+        completedLessons,
         profile,
         darkMode,
         toast,
@@ -117,6 +148,7 @@ export function AppProvider({ children }) {
         removeCourse,
         toggleWishlist,
         updateProgress,
+        toggleLesson,
         showToast,
       }}
     >
