@@ -363,6 +363,23 @@ function CourseDetails() {
 
       {/* Everything stacked, Coursera-style */}
       <div className="max-w-5xl mx-auto px-6 py-12">
+        {progress[course.id] === 100 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl px-6 py-5 mb-10">
+            <div className="flex items-center gap-3">
+              <Award size={28} className="text-green-600 dark:text-green-400 shrink-0" />
+              <div>
+                <p className="font-semibold text-gray-900 dark:text-white">Course completed!</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
+                  You've finished all lessons — your certificate is ready.
+                </p>
+              </div>
+            </div>
+            <Link to={`/certificate/${course.id}`}>
+              <Button className="whitespace-nowrap">Get Certificate</Button>
+            </Link>
+          </div>
+        )}
+
         {/* Course Content - lesson tracking */}
         <div className="mb-14">
           <div className="flex items-center justify-between mb-2">

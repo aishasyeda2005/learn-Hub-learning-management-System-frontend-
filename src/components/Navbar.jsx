@@ -17,7 +17,7 @@ function Navbar() {
   ];
 
   return (
-    <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
+    <nav className="relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 print:hidden">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center gap-6">
         {/* Logo */}
         <Link to="/" className="text-2xl font-bold text-[#0056D2] dark:text-blue-400 shrink-0">

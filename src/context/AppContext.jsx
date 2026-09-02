@@ -35,6 +35,7 @@ export function AppProvider({ children }) {
       : {
           fullName: "Syeda Aisha",
           photo: "",
+          banner: "",          
           email: "aisha@example.com",
           university: "Your University",
           department: "Computer Science",

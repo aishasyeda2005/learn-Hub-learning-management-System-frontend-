@@ -9,6 +9,7 @@ function Profile() {
   const [formData, setFormData] = useState(profile);
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null);
+  const bannerInputRef = useRef(null);
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,6 +30,25 @@ function Profile() {
       setProfile({ ...profile, photo });
       setFormData((prev) => ({ ...prev, photo }));
       showToast("Profile picture updated");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleBannerChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      showToast("Please select an image file", "error");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const banner = reader.result; // base64 data URL
+      setProfile({ ...profile, banner });
+      setFormData((prev) => ({ ...prev, banner }));
+      showToast("Banner updated");
     };
     reader.readAsDataURL(file);
   }
@@ -69,7 +89,29 @@ function Profile() {
       {/* Account card with cover + avatar */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
         {/* Cover banner */}
-        <div className="h-32 bg-gradient-to-r from-[#0056D2] to-[#00308F]" />
+        <div className="relative h-32 bg-gradient-to-r from-[#0056D2] to-[#00308F] group">
+          {profile.banner && (
+            <img
+              src={profile.banner}
+              alt="Banner"
+              className="w-full h-full object-cover"
+            />
+          )}
+          <button
+            onClick={() => bannerInputRef.current.click()}
+            className="absolute top-3 right-3 bg-white/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-600 rounded-full p-2 opacity-0 group-hover:opacity-100 transition"
+            aria-label="Change banner"
+          >
+            <Camera size={16} className="text-gray-700 dark:text-gray-200" />
+          </button>
+          <input
+            ref={bannerInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleBannerChange}
+            className="hidden"
+          />
+        </div>
 
         <div className="px-8 pb-8">
           <div className="flex items-end justify-between -mt-12 mb-4">

@@ -55,7 +55,7 @@ function AuthModal({ mode = "login", onClose }) {
             <span className="text-lg font-bold text-[#1877F2]">f</span> Continue with Facebook
           </button>
           <button className="flex items-center justify-center gap-3 border border-gray-300 dark:border-gray-600 rounded-lg py-3 font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-            🍎 Continue with Apple
+            Continue with Apple
           </button>
         </div>
 
